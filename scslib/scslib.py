@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 import abc
-import re
 import scslib
 import sys
 from bs4 import BeautifulSoup
@@ -19,24 +18,10 @@ class Transformer(object):
         for child in self.soup.descendants:
             if child.name in scslib.get_tag_names_on_whitelist():
                 try:
-                    cname = self.build_shortcode_class_name(child.name)
+                    cname = '{}Shortcode'.format(scslib.camelize(child.name))
                     self.shortcodes.append(getattr(mod, cname)(child))
                 except AttributeError:
                     self.shortcodes.append(None)
-
-    @staticmethod
-    def build_shortcode_class_name(tag_name):
-        """Builds class name for shortcode class based on its tag name.
-
-        :param tag_name: tag name of shortcode tag
-        :type tag_name: str or unicode
-        :returns: camel-case formatted string
-        :rtype: str or unicode
-        """
-        camel = re.sub(r'(?!^)[-|_]([a-zA-Z])',
-                       lambda m: m.group(1).upper(), tag_name)
-        cname = '{}Shortcode'
-        return cname.format(''.join([camel[0].upper(), camel[1:]]))
 
 
 class ShortcodeBase():
