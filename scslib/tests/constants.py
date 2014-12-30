@@ -2,17 +2,19 @@
 from __future__ import absolute_import, unicode_literals
 
 
-WHITELIST = ('media', 'image',)
+WHITELIST = ('test', 'image',)
 
 
 TEST_STRING = """
 <div>
 <h1>Hello world</h1>
 <image embed-id="foobar" class="img-responsive" />
+<test />
 <bs-row fluid="true">
     <bs-col sm="12" md="8">
         <h2>Head</h2>
         <p>Lorem ipsum.</p>
+        <test class="hello-world">Foobar</test>
     </bs-col>
     <bs-col sm="12" md="4">
         <image embed-id="foobar" class="img-responsive" lazy="true" />

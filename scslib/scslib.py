@@ -2,7 +2,6 @@
 from __future__ import absolute_import, unicode_literals
 import abc
 import scslib
-import sys
 from bs4 import BeautifulSoup
 
 
@@ -13,19 +12,28 @@ class Transformer(object):
         self.shortcodes = list()
 
     def collect_shortcode_tokens(self):
-        """Creates list with all shortcodes from ``input_string``."""
-        mod = sys.modules[__name__]
+        """Appends shortcodes from ``input_string`` to ``self.shortcodes``.
+
+        Only shortcodes provided by the whitelist are processed. If no
+        shortcode class is registered at ``registered_shortcodes``
+        None is appended and the shortcode tag will be ignored.
+        """
         for child in self.soup.descendants:
             if child.name in scslib.get_tag_names_on_whitelist():
                 try:
                     cname = '{}Shortcode'.format(scslib.camelize(child.name))
-                    self.shortcodes.append(getattr(mod, cname)(child))
-                except AttributeError:
+                    self.shortcodes.append(
+                        scslib.registered_shortcodes[cname](child))
+                except KeyError:
                     self.shortcodes.append(None)
 
 
 class ShortcodeBase():
-    """Abstract base class for shortcodes."""
+    """Abstract base class for shortcodes.
+
+    Shortcode definition classes need to extend from ``ShortcodeBase`` to
+    implement their behavior.
+    """
     __metaclass__ = abc.ABCMeta
 
     def __init__(self, token):
@@ -33,11 +41,20 @@ class ShortcodeBase():
         self.is_lookahead = False
         self.is_valid = False
         self.output = ''
+        self.errors = list()
 
     @abc.abstractmethod
     def validate(self):
-        """Abstract ``validate`` that must be implemented in subclass."""
+        """Abstract method ``validate`` must be implemented in subclass.
+
+        Validation includes guarding the provided attributes
+        a) in terms of type and range safety.
+        b) in terms of completeness.
+
+        Only when validation passes the shortcode is supposed to modify the
+        input values to valid output.
+        """
 
     @abc.abstractmethod
     def transform(self):
-        """Abstract ``transform`` that must be implemented in subclass."""
+        """Abstract method ``transform`` must be implemented in subclass."""

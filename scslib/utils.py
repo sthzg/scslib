@@ -5,7 +5,7 @@ import re
 
 def get_tag_names_on_whitelist():
     # TODO(sthzg)
-    return 'media', 'image'
+    return 'test', 'image'
 
 
 def camelize(value):

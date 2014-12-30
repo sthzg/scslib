@@ -10,7 +10,7 @@ class TransformerTestCase(unittest.TestCase):
         """Tags that are not on the whitelist are filtered from ``tokens``."""
         transformer = scslib.Transformer(TEST_STRING)
         transformer.collect_shortcode_tokens()
-        self.assertEqual(len(transformer.shortcodes), 6)
+        self.assertEqual(len(transformer.shortcodes), 8)
 
 
 if __name__ == '__main__':
