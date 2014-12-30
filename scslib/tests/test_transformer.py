@@ -22,6 +22,11 @@ class TransformerTestCase(unittest.TestCase):
         cname = scslib.Transformer.build_shortcode_class_name('foo-bar-bam')
         self.assertEqual(cname, 'FooBarBamShortcode')
 
+    def test_build_shortcode_class_name_underscored(self):
+        """Class name for underscored shortcode tag is built correctly."""
+        cname = scslib.Transformer.build_shortcode_class_name('foo_bar_bam')
+        self.assertEqual(cname, 'FooBarBamShortcode')
+
 
 if __name__ == '__main__':
     unittest.main()

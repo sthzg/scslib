@@ -29,11 +29,11 @@ class Transformer(object):
         """Builds class name for shortcode class based on its tag name.
 
         :param tag_name: tag name of shortcode tag
-        :type tag_name: str
+        :type tag_name: str or unicode
         :returns: camel-case formatted string
         :rtype: str or unicode
         """
-        camel = re.sub(r'(?!^)-([a-zA-Z])',
+        camel = re.sub(r'(?!^)[-|_]([a-zA-Z])',
                        lambda m: m.group(1).upper(), tag_name)
         cname = '{}Shortcode'
         return cname.format(''.join([camel[0].upper(), camel[1:]]))
