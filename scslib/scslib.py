@@ -11,6 +11,11 @@ class Transformer(object):
         self.soup = BeautifulSoup(input_string, 'html.parser')
         self.shortcodes = list()
 
+    def run(self):
+        """Runs the transformer."""
+        self.collect_shortcode_tokens()
+        self.build_output()
+
     def collect_shortcode_tokens(self):
         """Appends shortcodes from ``input_string`` to ``self.shortcodes``.
 
@@ -27,6 +32,13 @@ class Transformer(object):
                 except KeyError:
                     self.shortcodes.append(None)
 
+    def build_output(self):
+        """Apply transformations and replace with transformed output."""
+        # TODO(sthzg) Will probably break with nested structures.
+        for shortcode in self.shortcodes:
+            if not shortcode: continue
+            shortcode.transform()
+            shortcode.token.replace_with(shortcode.output)
 
 class ShortcodeBase():
     """Abstract base class for shortcodes.
