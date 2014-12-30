@@ -20,6 +20,11 @@ class UtilsTestCase(unittest.TestCase):
         cname = scslib.camelize('foo_bar_bam')
         self.assertEqual(cname, 'FooBarBam')
 
+    def test_camelize_mixed(self):
+        """Camel case conversion handles mixed notation and preserves case."""
+        cname = scslib.camelize('FO_bar-bamBaz')
+        self.assertEqual(cname, 'FOBarBamBaz')
+
 
 if __name__ == '__main__':
     unittest.main()
