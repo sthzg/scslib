@@ -7,7 +7,6 @@ from __future__ import absolute_import, unicode_literals
 from collections import OrderedDict
 import importlib
 import inspect
-import sys
 
 
 ERR_BUNDLE_MODULE_TYPE = 'Shortcode bundle modules must provide a ' \
