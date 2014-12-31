@@ -3,11 +3,6 @@ from __future__ import absolute_import, unicode_literals
 import re
 
 
-def get_tag_names_on_whitelist():
-    # TODO(sthzg)
-    return 'test', 'image'
-
-
 def camelize(value):
     """Converts the input string to camel case notation.
 
@@ -24,5 +19,6 @@ def camelize(value):
     :returns: camel-case formatted string
     :rtype: str or unicode
     """
+    # TODO(sthzg) Currently unused, but left in because it might become useful.
     camel = re.sub(r'(?!^)[-|_]([a-zA-Z])', lambda m: m.group(1).upper(), value)
     return ''.join([camel[0].upper(), camel[1:]])

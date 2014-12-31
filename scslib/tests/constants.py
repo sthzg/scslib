@@ -2,9 +2,6 @@
 from __future__ import absolute_import, unicode_literals
 
 
-WHITELIST = ('test', 'image',)
-
-
 TEST_STRING = """
 <div>
     <test />

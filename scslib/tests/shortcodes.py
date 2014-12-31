@@ -8,6 +8,8 @@ BUNDLE_NAME = "test_bundle"
 
 class TestShortcode(scslib.ShortcodeBase):
     """A dummy shortcode implementation for basic testing."""
+    shortcode = 'test'
+
     def __init__(self, *args, **kwargs):
         super(TestShortcode, self).__init__(*args, **kwargs)
 

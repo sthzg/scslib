@@ -22,7 +22,7 @@ class RegistryTestCase(unittest.TestCase):
         registry.register_bundle('scslib.tests.shortcodes')
         registry.register_shortcodes()
         self.assertEqual(len(registry.registered_shortcodes), 1)
-        self.assertEqual('TestShortcode' in registry.registered_shortcodes.keys(), True)
+        self.assertEqual('test' in registry.registered_shortcodes.keys(), True)
 
 
 if __name__ == '__main__':

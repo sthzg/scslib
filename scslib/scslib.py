@@ -6,10 +6,17 @@ from bs4 import BeautifulSoup
 
 
 class Transformer(object):
-    def __init__(self, input_string=None):
+    def __init__(self, input_string=None, config=None):
         self.input_string = input_string
         self.soup = BeautifulSoup(input_string, 'html.parser')
         self.shortcodes = list()
+        self.config = config or dict()
+
+        # Default whitelisted shortcodes to all shortcodes available in the
+        # registered bundles.
+        whitelist = self.config.get('whitelist')
+        if not whitelist and whitelist is None:
+            self.config['whitelist'] = scslib.registered_shortcodes.keys()
 
     def run(self):
         """Runs the transformer."""
@@ -21,16 +28,20 @@ class Transformer(object):
 
         Only shortcodes provided by the whitelist are processed. If no
         shortcode class is registered at ``registered_shortcodes``
-        None is appended and the shortcode tag will be ignored.
+        the tag will be ignored be ignored.
         """
         for child in self.soup.descendants:
-            if child.name in scslib.get_tag_names_on_whitelist():
+            if child.name in self.config.get('whitelist'):
                 try:
-                    cname = '{}Shortcode'.format(scslib.camelize(child.name))
                     self.shortcodes.append(
-                        scslib.registered_shortcodes[cname](child))
+                        # Instantiate the shortcode instance.
+                        scslib.registered_shortcodes[child.name](
+                            child,
+                            self.config.get('shortcodes', {}).get(child.name)
+                        ))
+
                 except KeyError:
-                    self.shortcodes.append(None)
+                    continue
 
     def build_output(self):
         """Apply transformations and replace with transformed output."""
@@ -40,6 +51,7 @@ class Transformer(object):
             shortcode.transform()
             shortcode.token.replace_with(shortcode.output)
 
+
 class ShortcodeBase():
     """Abstract base class for shortcodes.
 
@@ -48,12 +60,13 @@ class ShortcodeBase():
     """
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, token):
+    def __init__(self, token, config=None):
         self.token = token
         self.is_lookahead = False
         self.is_valid = False
         self.output = ''
         self.errors = list()
+        self.config = config
 
     @abc.abstractmethod
     def validate(self):
@@ -70,3 +83,9 @@ class ShortcodeBase():
     @abc.abstractmethod
     def transform(self):
         """Abstract method ``transform`` must be implemented in subclass."""
+
+
+class ShortcodeConfigBase(object):
+    """Base class for shortcode configuration objects."""
+    def __init__(self):
+        pass

@@ -19,6 +19,13 @@ class TransformerTestCase(unittest.TestCase):
         transformer.collect_shortcode_tokens()
         self.assertEqual(len(transformer.shortcodes), 2)
 
+    def test_overriding_whitelist_with_config(self):
+        """Configuring an empty whitelist results in zero found shortcodes."""
+        config = {'whitelist': list()}
+        transformer = scslib.Transformer(TEST_STRING, config=config)
+        transformer.collect_shortcode_tokens()
+        self.assertEqual(len(transformer.shortcodes), 0)
+
     def test_build_output(self):
         """Output of test transformation is correct."""
         transformer = scslib.Transformer(TEST_STRING)

@@ -44,4 +44,4 @@ def register_shortcodes():
             cond2 = name.endswith('Shortcode')
             cond3 = name not in registered_shortcodes
             if cond1 and cond2 and cond3:
-                registered_shortcodes[name] = obj
+                registered_shortcodes[obj.shortcode] = obj
