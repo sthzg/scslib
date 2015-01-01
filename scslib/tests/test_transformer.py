@@ -34,5 +34,6 @@ class TransformerTestCase(unittest.TestCase):
         expected = BeautifulSoup(TEST_STRING_RESULT).prettify()
         self.assertEqual(expected, transformer.soup.prettify())
 
+
 if __name__ == '__main__':
     unittest.main()
