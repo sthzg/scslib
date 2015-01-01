@@ -4,6 +4,7 @@ import unittest
 import scslib
 from bs4 import BeautifulSoup
 from scslib.tests.constants import *
+from scslib.tests.shortcodes import TestShortcode
 
 
 class TransformerTestCase(unittest.TestCase):
@@ -33,6 +34,14 @@ class TransformerTestCase(unittest.TestCase):
         transformer.build_output()
         expected = BeautifulSoup(TEST_STRING_RESULT).prettify()
         self.assertEqual(expected, transformer.soup.prettify())
+
+    def test__instantiate_shortcode_class(self):
+        """Method returns instance of appropriate shortcode class."""
+        transformer = scslib.Transformer(TEST_STRING)
+        transformer.collect_shortcode_tokens()
+        shortcode = transformer.shortcodes[0].token
+        sc_instance = transformer._instantiate_shortcode_class(shortcode)
+        self.assertEqual(type(sc_instance), TestShortcode)
 
 
 if __name__ == '__main__':
