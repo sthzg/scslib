@@ -30,18 +30,28 @@ class Transformer(object):
         shortcode class is registered at ``registered_shortcodes``
         the tag will be ignored be ignored.
         """
-        for child in self.soup.descendants:
-            if child.name in self.config.get('whitelist'):
-                try:
-                    self.shortcodes.append(
-                        # Instantiate the shortcode instance.
-                        scslib.registered_shortcodes[child.name](
-                            child,
-                            self.config.get('shortcodes', {}).get(child.name)
-                        ))
+        whitelist = self.config.get('whitelist')
+        matches = filter(lambda x: x.name in whitelist, self.soup.descendants)
 
-                except KeyError:
-                    continue
+        self.shortcodes = [
+            self._instantiate_shortcode_class(sc)
+            for sc in matches if sc.name in scslib.registered_shortcodes
+        ]
+
+        # TODO(sthzg) Notify users about whitelisted but unreg'ed descendants?
+
+    def _instantiate_shortcode_class(self, shortcode):
+        """Instantiates an instance of a shortcode class.
+
+        :param shortcode: beautiful soup ``Tag`` instance of the shortcode tag
+        :type shortcode: bs4.element.Tag
+        :returns: instance of shortcode class (descends from ``ShortcodeBase``)
+        :rtype: ShortcodeBase
+        """
+        return scslib.registered_shortcodes[shortcode.name](
+            shortcode,
+            self.config.get('shortcodes', {}).get(shortcode.name)
+        )
 
     def build_output(self):
         """Apply transformations and replace with transformed output."""
