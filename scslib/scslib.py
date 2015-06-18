@@ -28,7 +28,7 @@ class Transformer(object):
 
         Only shortcodes provided by the whitelist are processed. If no
         shortcode class is registered at ``registered_shortcodes``
-        the tag will be ignored be ignored.
+        the tag will be ignored.
         """
         whitelist = self.config.get('whitelist')
         matches = filter(lambda x: x.name in whitelist, self.soup.descendants)
