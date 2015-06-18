@@ -21,7 +21,7 @@ class RegistryTestCase(unittest.TestCase):
         """All shortcodes are registered in ``registered_shortcodes``."""
         registry.register_bundle('scslib.tests.shortcodes')
         registry.register_shortcodes()
-        self.assertEqual(len(registry.registered_shortcodes), 1)
+        self.assertEqual(len(registry.registered_shortcodes), 2)
         self.assertEqual('test' in registry.registered_shortcodes.keys(), True)
 
 
