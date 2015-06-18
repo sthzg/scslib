@@ -8,6 +8,13 @@ from scslib.tests.shortcodes import TestShortcode
 
 
 class TransformerTestCase(unittest.TestCase):
+    def setUp(self):
+        scslib.register_bundle('scslib.tests.shortcodes')
+        scslib.register_shortcodes()
+
+    def tearDown(self):
+        pass
+
     def test_markup_in_soup(self):
         """Soup HTML in transformer is equal to source HTML."""
         soup = BeautifulSoup(TEST_STRING)
@@ -42,6 +49,13 @@ class TransformerTestCase(unittest.TestCase):
         shortcode = transformer.shortcodes[0].token
         sc_instance = transformer._instantiate_shortcode_class(shortcode)
         self.assertEqual(type(sc_instance), TestShortcode)
+
+    def test__oc_shortcode(self):
+        transformer = scslib.Transformer(TEST_OC_STRING)
+        transformer.collect_shortcode_tokens()
+        transformer.build_output()
+        expected = BeautifulSoup(TEST_OC_STRING_RESULT).prettify()
+        self.assertEqual(expected, transformer.soup.prettify())
 
 
 if __name__ == '__main__':

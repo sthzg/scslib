@@ -19,3 +19,15 @@ TEST_STRING_RESULT = """
     </div>
 </div>
 """
+
+TEST_OC_STRING = """
+<div>
+    <openclose class="foobar">I am content!</test>
+</div>
+"""
+
+TEST_OC_STRING_RESULT = """
+<div>
+    <div>I am content!</div>
+</div>
+"""
