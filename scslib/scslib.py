@@ -19,15 +19,16 @@ class Transformer(object):
             self.config['whitelist'] = scslib.registered_shortcodes.keys()
 
     def run(self):
-        """Runs the transformer."""
+        """ Runs the transformer.
+        """
         self.collect_shortcode_tokens()
         self.build_output()
 
     def collect_shortcode_tokens(self):
-        """Appends shortcodes from ``input_string`` to ``self.shortcodes``.
+        """ Appends shortcodes from ``input_string`` to ``self.shortcodes``.
 
-        Only shortcodes provided by the whitelist are processed. If no
-        shortcode class is registered at ``registered_shortcodes``
+        Only shortcodes listed in the whitelist are processed. If no
+        shortcode class is registered at `registered_shortcodes`
         the tag will be ignored.
         """
         whitelist = self.config.get('whitelist')
@@ -41,7 +42,7 @@ class Transformer(object):
         # TODO(sthzg) Notify users about whitelisted but unreg'ed descendants?
 
     def _instantiate_shortcode_class(self, shortcode):
-        """Instantiates an instance of a shortcode class.
+        """ Instantiates an instance of a shortcode class.
 
         :param shortcode: beautiful soup ``Tag`` instance of the shortcode tag
         :type shortcode: bs4.element.Tag
@@ -54,7 +55,8 @@ class Transformer(object):
         )
 
     def build_output(self):
-        """Apply transformations and replace with transformed output."""
+        """ Apply transformations and replace with transformed output.
+        """
         # TODO(sthzg) Will probably break with nested structures.
         for shortcode in self.shortcodes:
             if not shortcode: continue
@@ -62,10 +64,10 @@ class Transformer(object):
             shortcode.token.replace_with(shortcode.output)
 
 
-class ShortcodeBase():
-    """Abstract base class for shortcodes.
+class ShortcodeBase(object):
+    """ Abstract base class for shortcodes.
 
-    Shortcode definition classes need to extend from ``ShortcodeBase`` to
+    Shortcode definition classes need to extend from `ShortcodeBase` to
     implement their behavior.
     """
     __metaclass__ = abc.ABCMeta
@@ -80,7 +82,7 @@ class ShortcodeBase():
 
     @abc.abstractmethod
     def validate(self):
-        """Abstract method ``validate`` must be implemented in subclass.
+        """ Abstract method `validate` must be implemented in subclass.
 
         Validation includes guarding the provided attributes
         a) in terms of type and range safety.
@@ -92,10 +94,12 @@ class ShortcodeBase():
 
     @abc.abstractmethod
     def transform(self):
-        """Abstract method ``transform`` must be implemented in subclass."""
+        """ Abstract method ``transform`` must be implemented in subclass.
+        """
 
 
 class ShortcodeConfigBase(object):
-    """Base class for shortcode configuration objects."""
+    """ Base class for shortcode configuration objects.
+    """
     def __init__(self):
         pass
